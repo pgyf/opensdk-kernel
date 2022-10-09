@@ -2,6 +2,8 @@
 
 namespace Pgyf\Opensdk\Kernel\Support;
 
+use Pgyf\Opensdk\Kernel\Exceptions\InvalidArgumentException;
+
 /**
  * json类
  */
@@ -18,7 +20,11 @@ class Json
         if(is_array($content)){
             return $content;
         }
-        return json_decode($content, $assoc, $depth, $options);
+        $arr = json_decode($content, $assoc, $depth, $options);
+        if (\JSON_ERROR_NONE !== \json_last_error()) {
+            throw new InvalidArgumentException('json_decode error: ' . \json_last_error_msg());
+        }
+        return $arr;
     }
 
     /**
@@ -31,7 +37,11 @@ class Json
         if(!is_array($content)){
             return $content;
         }
-        return json_encode($content, $options, $depth);
+        $json = json_encode($content, $options, $depth);
+        if (\JSON_ERROR_NONE !== \json_last_error()) {
+            throw new InvalidArgumentException('json_decode error: ' . \json_last_error_msg());
+        }
+        return $json;
     }
 
 }
