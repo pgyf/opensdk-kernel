@@ -16,7 +16,6 @@
             "email": "381296986@qq.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "php": ">=7.1",
         "ext-openssl": "*",

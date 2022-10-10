@@ -48,7 +48,7 @@ class User implements ArrayAccess, Contracts\UserInterface, JsonSerializable
         return $this->getAttribute(Contracts\ABNF_AVATAR);
     }
 
-    public function setAccessToken(string $value): self
+    public function setAccessToken(string $value): Contracts\UserInterface
     {
         $this->setAttribute(Contracts\RFC6749_ABNF_ACCESS_TOKEN, $value);
 
@@ -60,7 +60,8 @@ class User implements ArrayAccess, Contracts\UserInterface, JsonSerializable
         return $this->getAttribute(Contracts\RFC6749_ABNF_ACCESS_TOKEN);
     }
 
-    public function setRefreshToken(?string $value): self
+    
+    public function setRefreshToken(?string $value): Contracts\UserInterface
     {
         $this->setAttribute(Contracts\RFC6749_ABNF_REFRESH_TOKEN, $value);
 
@@ -72,7 +73,7 @@ class User implements ArrayAccess, Contracts\UserInterface, JsonSerializable
         return $this->getAttribute(Contracts\RFC6749_ABNF_REFRESH_TOKEN);
     }
 
-    public function setExpiresIn(int $value): self
+    public function setExpiresIn(int $value): Contracts\UserInterface
     {
         $this->setAttribute(Contracts\RFC6749_ABNF_EXPIRES_IN, $value);
 
@@ -84,7 +85,7 @@ class User implements ArrayAccess, Contracts\UserInterface, JsonSerializable
         return $this->getAttribute(Contracts\RFC6749_ABNF_EXPIRES_IN);
     }
 
-    public function setRaw(array $user): self
+    public function setRaw(array $user): Contracts\UserInterface
     {
         $this->setAttribute('raw', $user);
 
@@ -96,7 +97,7 @@ class User implements ArrayAccess, Contracts\UserInterface, JsonSerializable
         return $this->getAttribute('raw');
     }
 
-    public function setTokenResponse(array $response): self
+    public function setTokenResponse(array $response): Contracts\UserInterface
     {
         $this->setAttribute('token_response', $response);
 
@@ -135,7 +136,7 @@ class User implements ArrayAccess, Contracts\UserInterface, JsonSerializable
         return $this->provider;
     }
 
-    public function setProvider(Contracts\ProviderInterface $provider): self
+    public function setProvider(Contracts\ProviderInterface $provider): Contracts\UserInterface
     {
         $this->provider = $provider;
 

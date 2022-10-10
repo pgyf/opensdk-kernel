@@ -10,7 +10,10 @@ const ABNF_AVATAR = 'avatar';
 
 interface UserInterface
 {
-    public function getId(): mixed;
+    /**
+     * @return mixed
+     */
+    public function getId();
 
     public function getNickname(): ?string;
 
@@ -34,7 +37,10 @@ interface UserInterface
 
     public function setTokenResponse(array $response): self;
 
-    public function getTokenResponse(): mixed;
+    /**
+     * @return mixed
+     */
+    public function getTokenResponse();
 
     public function setProvider(ProviderInterface $provider): self;
 

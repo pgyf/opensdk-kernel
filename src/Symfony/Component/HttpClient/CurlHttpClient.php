@@ -178,8 +178,10 @@ class CurlHttpClient implements HttpClientInterface
             $curlopts[\CURLOPT_NOSIGNAL] = true;
         }
 
+        
         if (\extension_loaded('zlib') && !isset($options['normalized_headers']['accept-encoding'])) {
-            $options['headers'][] = 'Accept-Encoding: gzip'; // Expose only one encoding, some servers mess up when more are provided
+            //$options['headers'][] = 'Accept-Encoding: gzip'; // Expose only one encoding, some servers mess up when more are provided
+            $curlopts[\CURLOPT_ENCODING] = 'gzip';
         }
 
         foreach ($options['headers'] as $header) {
