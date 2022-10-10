@@ -16,7 +16,7 @@ trait HasAttributes
         return $this->attributes;
     }
 
-    public function getAttribute(string $name, mixed $default = null): mixed
+    public function getAttribute(string $name, mixed $default = null)
     {
         return $this->attributes[$name] ?? $default;
     }
@@ -40,7 +40,7 @@ trait HasAttributes
         return \array_key_exists($offset, $this->attributes);
     }
 
-    public function offsetGet(mixed $offset): mixed
+    public function offsetGet(mixed $offset)
     {
         return $this->getAttribute($offset);
     }
@@ -55,7 +55,7 @@ trait HasAttributes
         unset($this->attributes[$offset]);
     }
 
-    public function __get(string $property): mixed
+    public function __get(string $property)
     {
         return $this->getAttribute($property);
     }
