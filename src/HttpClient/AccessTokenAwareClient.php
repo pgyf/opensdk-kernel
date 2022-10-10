@@ -32,10 +32,14 @@ class AccessTokenAwareClient implements AccessTokenAwareHttpClientInterface
 
 
     public function __construct(
-        HttpClientInterface $client = null,
-        AccessTokenInterface $accessToken = null,
-        Closure $failureJudge = null,
-        $throw = true
+        // HttpClientInterface $client = null,
+        // AccessTokenInterface $accessToken = null,
+        // Closure $failureJudge = null,
+        // $throw = true
+        ?HttpClientInterface $client = null,
+        ?AccessTokenInterface $accessToken = null,
+        ?Closure $failureJudge = null,
+        bool $throw = true
     ) {
         $this->client = $client ?? HttpClient::create();
         $this->accessToken = $accessToken;
@@ -48,7 +52,7 @@ class AccessTokenAwareClient implements AccessTokenAwareHttpClientInterface
      * @param AccessTokenInterface $accessToken
      * @return self
      */
-    public function withAccessToken(AccessTokenInterface $accessToken)
+    public function withAccessToken(AccessTokenInterface $accessToken): AccessTokenAwareHttpClientInterface
     {
         $this->accessToken = $accessToken;
 

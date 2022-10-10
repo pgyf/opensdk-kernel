@@ -25,6 +25,23 @@ class RequestUtil
 {
 
     /**
+     * @param  array<string, mixed>  $options
+     * @return array<string, mixed>
+     */
+    public static function mergeDefaultRetryOptions(array $options): array
+    {
+        return \array_merge([
+            //'status_codes' => GenericRetryStrategy::DEFAULT_RETRY_STATUS_CODES,
+            'delay' => 1000,
+            'max_delay' => 0,
+            'max_retries' => 3,
+            'multiplier' => 2.0,
+            'jitter' => 0.1,
+        ], $options);
+    }
+
+
+    /**
      * @param  array<string, array|mixed>  $options
      *
      * @return array<string, array|mixed>
@@ -33,10 +50,10 @@ class RequestUtil
     {
         $defaultOptions = \array_filter(
             $options,
+            //callback: fn ($key) => array_key_exists($key, HttpClientInterface::OPTIONS_DEFAULTS),
             function($key){
                 return array_key_exists($key, HttpClientInterface::OPTIONS_DEFAULTS);
             },
-            //callback: fn ($key) => array_key_exists($key, HttpClientInterface::OPTIONS_DEFAULTS),
             ARRAY_FILTER_USE_KEY
         );
 

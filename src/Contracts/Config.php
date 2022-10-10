@@ -29,7 +29,6 @@ interface Config extends ArrayAccess
     public function set(string $key, $value = null): void;
 
     /**
-     * Undocumented function
      * @param  array|string  $key
      * @param mixed $default
      * @return mixed

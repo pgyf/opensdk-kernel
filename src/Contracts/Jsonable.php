@@ -8,5 +8,5 @@ interface Jsonable
     /**
      * @return string|false
      */
-    public function toJson(): string;
+    public function toJson();
 }

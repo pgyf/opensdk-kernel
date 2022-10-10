@@ -12,5 +12,5 @@ interface AccessTokenAwareHttpClient extends HttpClientInterface
      * @param AccessTokenInterface $accessToken
      * @return self
      */
-    public function withAccessToken(AccessTokenInterface $accessToken);
+    public function withAccessToken(AccessTokenInterface $accessToken): self;
 }

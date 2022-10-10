@@ -34,7 +34,7 @@ trait RequestWithPresets
      * @param  array<string, mixed>  $presets
      * @return static
      */
-    public function setPresets(array $presets)
+    public function setPresets(array $presets): self
     {
         $this->presets = $presets;
 
@@ -46,7 +46,7 @@ trait RequestWithPresets
      * @param string $value
      * @return static
      */
-    public function withHeader(string $key, string $value)
+    public function withHeader(string $key, string $value): self
     {
         $this->prependHeaders[$key] = $value;
 
@@ -57,7 +57,7 @@ trait RequestWithPresets
      * @param array $headers
      * @return static
      */
-    public function withHeaders(array $headers)
+    public function withHeaders(array $headers): self
     {
         foreach ($headers as $key => $value) {
             $this->withHeader($key, $value);
@@ -73,7 +73,7 @@ trait RequestWithPresets
      * @return static
      * @throws InvalidArgumentException
      */
-    public function with($key, $value = null)
+    public function with($key, $value = null): self
     {
         if (\is_array($key)) {
             // $client->with(['appid', 'mchid'])
@@ -103,7 +103,7 @@ trait RequestWithPresets
     //  * @throws RuntimeException
     //  * @throws InvalidArgumentException
     //  */
-    // public function withFile(string $pathOrContents, string $formName = 'file', string $filename = null)
+    // public function withFile(string $pathOrContents, string $formName = 'file', string $filename = null): self
     // {
     //     $file = is_file($pathOrContents) ? File::fromPath(
     //         $pathOrContents,
@@ -131,7 +131,7 @@ trait RequestWithPresets
     //  * @throws RuntimeException
     //  * @throws InvalidArgumentException
     //  */
-    // public function withFileContents(string $contents, string $formName = 'file', string $filename = null)
+    // public function withFileContents(string $contents, string $formName = 'file', string $filename = null): self
     // {
     //     return $this->withFile($contents, $formName, $filename);
     // }
@@ -142,7 +142,7 @@ trait RequestWithPresets
     //  * @throws RuntimeException
     //  * @throws InvalidArgumentException
     //  */
-    // public function withFiles(array $files)
+    // public function withFiles(array $files): self
     // {
     //     foreach ($files as $key => $value) {
     //         $this->withFile($value, $key);
@@ -179,13 +179,12 @@ trait RequestWithPresets
     }
 
     /**
-     * Undocumented function
      * @param string $method
      * @param mixed $value
      * @return static
      * @throws InvalidArgumentException
      */
-    public function handleMagicWithCall(string $method, $value = null)
+    public function handleMagicWithCall(string $method, $value = null): self
     {
         // $client->withAppid();
         // $client->withAppid('wxf8b4f85f3a794e77');

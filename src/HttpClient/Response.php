@@ -48,8 +48,8 @@ class Response implements ArrayableInterface, JsonableInterface, ArrayAccess, Re
 
     public function __construct(
         ResponseInterface $response,
-        Closure $failureJudge = null,
-         bool $throw = true
+        ?Closure $failureJudge = null,
+        bool $throw = true
     ) {
         $this->response = $response;
         $this->failureJudge = $failureJudge;
@@ -61,7 +61,7 @@ class Response implements ArrayableInterface, JsonableInterface, ArrayAccess, Re
      * @param bool $throw
      * @return static
      */
-    public function throw(bool $throw = true)
+    public function throw(bool $throw = true): self
     {
         $this->throw = $throw;
 
@@ -71,7 +71,7 @@ class Response implements ArrayableInterface, JsonableInterface, ArrayAccess, Re
     /**
      * @return static
      */
-    public function throwOnFailure()
+    public function throwOnFailure(): self
     {
         return $this->throw(true);
     }
@@ -79,7 +79,7 @@ class Response implements ArrayableInterface, JsonableInterface, ArrayAccess, Re
     /**
      * @return static
      */
-    public function quietly()
+    public function quietly(): self
     {
         return $this->throw(false);
     }
@@ -88,10 +88,10 @@ class Response implements ArrayableInterface, JsonableInterface, ArrayAccess, Re
      * @param callable $callback
      * @return static
      */
-    public function judgeFailureUsing(callable $callback)
+    public function judgeFailureUsing(callable $callback): self
     {
         //$this->failureJudge = $callback instanceof Closure ? $callback : fn (Response $response) => $callback($response);
-        $this->failureJudge = $callback instanceof Closure ? $callback : function (Response $response){};
+        $this->failureJudge = $callback instanceof Closure ? $callback : function (Response $response) use($callback){  return $callback($response); };
 
         return $this;
     }
@@ -134,7 +134,7 @@ class Response implements ArrayableInterface, JsonableInterface, ArrayAccess, Re
      * @throws ClientExceptionInterface
      * @throws BadResponseException
      */
-    public function toArray(bool $throw = null): array
+    public function toArray(?bool $throw = null): array
     {
         if($throw === null){
             $throw = $this->throw;
@@ -168,10 +168,27 @@ class Response implements ArrayableInterface, JsonableInterface, ArrayAccess, Re
      * @throws ClientExceptionInterface
      * @throws BadResponseException
      */
-    public function toJson(bool $throw = null): string
+    public function toJson(?bool $throw = null)
     {
         return Json::encode($this->toArray($throw));
     }
+
+
+    // /**
+    //  * {@inheritdoc}
+    //  */
+    // public function toStream(?bool $throw = null)
+    // {
+    //     if ($this->response instanceof StreamableInterface) {
+    //         return $this->response->toStream($throw ?? $this->throw);
+    //     }
+
+    //     if ($throw) {
+    //         throw new BadMethodCallException(sprintf('%s does\'t implements %s', \get_class($this->response), StreamableInterface::class));
+    //     }
+
+    //     return StreamWrapper::createResource(new MockResponse());
+    // }
 
 
     /**
@@ -298,12 +315,12 @@ class Response implements ArrayableInterface, JsonableInterface, ArrayAccess, Re
         return $this->response->getStatusCode();
     }
 
-    public function getHeaders(bool $throw = null): array
+    public function getHeaders(?bool $throw = null): array
     {
         return $this->response->getHeaders($throw ?? $this->throw);
     }
 
-    public function getContent(bool $throw = null): string
+    public function getContent(?bool $throw = null): string
     {
         return $this->response->getContent($throw ?? $this->throw);
     }
@@ -341,7 +358,7 @@ class Response implements ArrayableInterface, JsonableInterface, ArrayAccess, Re
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    public function hasHeader(string $name, bool $throw = null): bool
+    public function hasHeader(string $name, ?bool $throw = null): bool
     {
         return isset($this->getHeaders($throw)[$name]);
     }
@@ -353,7 +370,7 @@ class Response implements ArrayableInterface, JsonableInterface, ArrayAccess, Re
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    public function getHeader(string $name, bool $throw = null): array
+    public function getHeader(string $name, ?bool $throw = null): array
     {
         $name = strtolower($name);
         if($throw === null){
@@ -368,7 +385,7 @@ class Response implements ArrayableInterface, JsonableInterface, ArrayAccess, Re
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
-    public function getHeaderLine(string $name, bool $throw = null): string
+    public function getHeaderLine(string $name, ?bool $throw = null): string
     {
         $name = strtolower($name);
         if($throw === null){

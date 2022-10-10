@@ -63,7 +63,7 @@ class Encryptor
      */
     protected $receiveId;
 
-    public function __construct(string $appId, string $token, string $aesKey, string $receiveId = null)
+    public function __construct(string $appId, string $token, string $aesKey, ?string $receiveId = null)
     {
         $this->appId = $appId;
         $this->token = $token;
@@ -84,7 +84,7 @@ class Encryptor
      * @throws RuntimeException
      * @throws Exception
      */
-    public function encrypt(string $plaintext, string $nonce = null, int $timestamp = null, $xml = true)
+    public function encrypt(string $plaintext, string $nonce = null, $timestamp = null, $xml = true)
     {
         try {
             $plaintext = Pkcs7::padding(random_bytes(16).pack('N', strlen($plaintext)).$plaintext.$this->appId, 32);
@@ -135,7 +135,7 @@ class Encryptor
      * @return string
      * @throws RuntimeException
      */
-    public function decrypt(string $ciphertext, string $msgSignature, string $nonce, int $timestamp)
+    public function decrypt(string $ciphertext, string $msgSignature, string $nonce, $timestamp)
     {
         $signature = $this->createSignature($this->token, $timestamp, $nonce, $ciphertext);
 

@@ -19,7 +19,7 @@ class PrivateKey
      */
     protected $passphrase = null;
 
-    public function __construct(string $key, string $passphrase = null)
+    public function __construct(string $key, ?string $passphrase = null)
     {
         if (file_exists($key)) {
             $this->key = "file://{$key}";
@@ -38,7 +38,7 @@ class PrivateKey
     /**
      * @return string|null
      */
-    public function getPassphrase()
+    public function getPassphrase(): ?string
     {
         return $this->passphrase;
     }

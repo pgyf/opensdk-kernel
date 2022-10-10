@@ -21,7 +21,7 @@ abstract class Message implements ArrayAccess
     /**
      * @param  array<string,string>  $attributes
      */
-    final public function __construct(array $attributes = [], string $originContent = '')
+    final public function __construct(array $attributes = [], ?string $originContent = '')
     {
         $this->attributes = $attributes;
     }
