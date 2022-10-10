@@ -227,7 +227,6 @@ class CurlHttpClient implements HttpClientInterface
         } elseif ('' !== $body || 'POST' === $method) {
             $curlopts[\CURLOPT_POSTFIELDS] = $body;
         }
-
         if ($options['peer_fingerprint']) {
             if (!isset($options['peer_fingerprint']['pin-sha256'])) {
                 throw new TransportException(__CLASS__.' supports only "pin-sha256" fingerprints.');
@@ -274,12 +273,12 @@ class CurlHttpClient implements HttpClientInterface
      * @param array $options
      * @return static
      */
-    // public function withOptions(array $options)
-    // {
-    //     $clone = clone $this;
-    //     $clone->defaultOptions = array_merge($this->defaultOptions, $options);
-    //     return $clone;
-    // }
+    public function withOptions(array $options)
+    {
+        $clone = clone $this;
+        $clone->defaultOptions = array_merge($this->defaultOptions, $options);
+        return $clone;
+    }
 
 
 

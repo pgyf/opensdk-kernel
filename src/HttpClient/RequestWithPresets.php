@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Pgyf\Opensdk\Kernel\HttpClient;
 
 use Pgyf\Opensdk\Kernel\Exceptions\InvalidArgumentException;
+use Pgyf\Opensdk\Kernel\Form\File;
+use Pgyf\Opensdk\Kernel\Form\Form;
 use Pgyf\Opensdk\Kernel\Support\Str;
 
 use function array_merge;
@@ -94,62 +96,73 @@ trait RequestWithPresets
         return $this;
     }
 
-    // /**
-    //  * Undocumented function
-    //  * @param string $pathOrContents
-    //  * @param string $formName
-    //  * @param string|null $filename
-    //  * @return static
-    //  * @throws RuntimeException
-    //  * @throws InvalidArgumentException
-    //  */
-    // public function withFile(string $pathOrContents, string $formName = 'file', string $filename = null): self
-    // {
-    //     $file = is_file($pathOrContents) ? File::fromPath(
-    //         $pathOrContents,
-    //         $filename
-    //     ) : File::withContents($pathOrContents, $filename);
+    /**
+     * Undocumented function
+     * @param string $pathOrContents
+     * @param string $formName
+     * @param string|null $filename
+     * @return static
+     * @throws RuntimeException
+     * @throws InvalidArgumentException
+     */
+    public function withFile(string $pathOrContents, string $formName = 'file', string $filename = null): self
+    {
+        $file = @is_file($pathOrContents) ? File::fromPath(
+            $pathOrContents,
+            $filename
+        ) : File::withContents($pathOrContents, $filename);
 
-    //     /**
-    //      * @var array{headers: array<string, string>, body: string}
-    //      */
-    //     $options = Form::create([$formName => $file])->toOptions();
+        /**
+         * @var array{headers: array<string, string>, body: string}
+         */
+        $options = Form::create([$formName => $file])->toOptions();
 
-    //     $this->withHeaders($options['headers']);
+        $headers = [];
+        if(isset($options['headers'][0])){
+            foreach ($options['headers'] as $value) {
+                $headerArr = explode(':', $value);
+                $headers[$headerArr[0]] = trim($headerArr[1]);
+            }
+        }
+        else{
+            $headers = $options['headers'];
+        }
+        
+        $this->withHeaders($headers);
+        
+        return $this->withOptions([
+            'body' => $options['body'],
+        ]);
+    }
 
-    //     return $this->withOptions([
-    //         'body' => $options['body'],
-    //     ]);
-    // }
+    /**
+     * Undocumented function
+     * @param string $contents
+     * @param string $formName
+     * @param string|null $filename
+     * @return static
+     * @throws RuntimeException
+     * @throws InvalidArgumentException
+     */
+    public function withFileContents(string $contents, string $formName = 'file', string $filename = null): self
+    {
+        return $this->withFile($contents, $formName, $filename);
+    }
 
-    // /**
-    //  * Undocumented function
-    //  * @param string $contents
-    //  * @param string $formName
-    //  * @param string|null $filename
-    //  * @return static
-    //  * @throws RuntimeException
-    //  * @throws InvalidArgumentException
-    //  */
-    // public function withFileContents(string $contents, string $formName = 'file', string $filename = null): self
-    // {
-    //     return $this->withFile($contents, $formName, $filename);
-    // }
+    /**
+     * @param array $files
+     * @return static
+     * @throws RuntimeException
+     * @throws InvalidArgumentException
+     */
+    public function withFiles(array $files): self
+    {
+        foreach ($files as $key => $value) {
+            $this->withFile($value, $key);
+        }
 
-    // /**
-    //  * @param array $files
-    //  * @return static
-    //  * @throws RuntimeException
-    //  * @throws InvalidArgumentException
-    //  */
-    // public function withFiles(array $files): self
-    // {
-    //     foreach ($files as $key => $value) {
-    //         $this->withFile($value, $key);
-    //     }
-
-    //     return $this;
-    // }
+        return $this;
+    }
 
     public function mergeThenResetPrepends(array $options, string $method = 'GET'): array
     {
