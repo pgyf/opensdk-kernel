@@ -10,6 +10,7 @@ use Pgyf\Opensdk\Kernel\Support\Json;
 use Pgyf\Opensdk\Kernel\Symfony\Contracts\HttpClient\HttpClientInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
+use Pgyf\Opensdk\Kernel\Symfony\Component\HttpClient\Retry\GenericRetryStrategy;
 use Psr\Http\Message\ServerRequestInterface;
 
 use function array_key_exists;
@@ -23,7 +24,6 @@ use const JSON_UNESCAPED_UNICODE;
 
 class RequestUtil
 {
-
     /**
      * @param  array<string, mixed>  $options
      * @return array<string, mixed>
@@ -31,7 +31,7 @@ class RequestUtil
     public static function mergeDefaultRetryOptions(array $options): array
     {
         return \array_merge([
-            //'status_codes' => GenericRetryStrategy::DEFAULT_RETRY_STATUS_CODES,
+            'status_codes' => GenericRetryStrategy::DEFAULT_RETRY_STATUS_CODES,
             'delay' => 1000,
             'max_delay' => 0,
             'max_retries' => 3,

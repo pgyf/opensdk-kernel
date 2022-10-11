@@ -55,6 +55,9 @@ class Str
      */
     public static function contains(string $haystack, $needles)
     {
+        if(function_exists('str_contains')){
+            return str_contains($haystack, $needles);
+        }
         foreach ((array) $needles as $needle) {
             if ('' != $needle && mb_strpos($haystack, $needle) !== false) {
                 return true;

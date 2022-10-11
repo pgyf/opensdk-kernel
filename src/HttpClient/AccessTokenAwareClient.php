@@ -25,6 +25,8 @@ class AccessTokenAwareClient implements AccessTokenAwareHttpClientInterface
 {
     use ClientTrait;
 
+    use RetryableClient;
+
     /**
      * @var AccessTokenInterface
      */
@@ -32,10 +34,6 @@ class AccessTokenAwareClient implements AccessTokenAwareHttpClientInterface
 
 
     public function __construct(
-        // HttpClientInterface $client = null,
-        // AccessTokenInterface $accessToken = null,
-        // Closure $failureJudge = null,
-        // $throw = true
         ?HttpClientInterface $client = null,
         ?AccessTokenInterface $accessToken = null,
         ?Closure $failureJudge = null,
@@ -75,7 +73,19 @@ class AccessTokenAwareClient implements AccessTokenAwareHttpClientInterface
                 $options['query'] = array_merge((array) ($options['query'] ?? []), $this->accessToken->toQuery());
             }
         }
-        return $this->requestBuild($method, $url, $options);
+        $response = $this->requestBuild($method, $url, $options);
+        //重试
+        if(!empty($this->strategy)){
+            if($this->strategy->shouldRetry($response, $response->getContent(false), null)){
+                $delay = $this->strategy->getDelay($response, $response->getContent(false), null);
+                if ($this->maxRetries > 0) {
+                    usleep($delay * 1000);
+                    $this->maxRetries--;
+                    return $this->request($method, $url, $options);
+                }
+            }
+        }
+        return $response;
     }
 
 
