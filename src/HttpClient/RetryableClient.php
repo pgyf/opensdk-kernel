@@ -25,7 +25,6 @@ trait RetryableClient
     protected $maxRetries = 1;
 
     /**
-     * Undocumented function
      * @param array|bool $config
      * @return self
      */
@@ -54,6 +53,20 @@ trait RetryableClient
         );
         return $this->retryUsing($strategy, (int) $config['max_retries']);
     }
+
+
+    /**
+     * @param RetryStrategyInterface $strategy
+     * @return self
+     */
+    public function retrySetStrategy(RetryStrategyInterface $strategy, int $maxRetries = 1): self
+    {
+        if(empty($strategy)){
+            return $this;
+        }
+        return $this->retryUsing($strategy, $maxRetries);
+    }
+
 
 
     public function retryUsing(
